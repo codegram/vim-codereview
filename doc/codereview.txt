@@ -1,0 +1,64 @@
+*codereview.txt*  GitHub Pull Request-based Code Reviews
+
+Version: 0.1
+Author:  Josep M. Bach <me at txus io>
+Sponsor: Codegram Technologies <http://codegram.com>
+License: MIT license {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+INTRODUCTION                                    *codereview*
+
+With *codereview* you can review Pull Requests on GitHub right from Vim, as
+well as comment on specific lines of the pull request or in the general PR
+comments.
+
+Since it builds upon the great *patchreview* and adds some GitHub-related
+convenience, it needs the *patchreview* Vim plug-in to be installed.
+
+INSTALL                                         *codereview-install*
+
+Make sure you have compiled Vim with Ruby support and the Ruby you compiled it
+with is 1.9+ compatible.
+
+Also, you'll need `curl` installed.
+
+If you use Vundle put this in your vimrc:
+
+Bundle 'junkblocker/patchreview-vim'
+Bundle 'codegram/vim-codereview'
+
+If you use Pathogen, clone this repo in your `~/.vim/bundle` directory.
+
+USAGE                                           *codereview-usage*
+
+Make sure you're in the correct folder for the Git repository you want to
+review the PR on.
+
+To start a code review for a specific pull request:
+>
+  :CodeReview https://github.com/myorganization/myrepo/pulls/1328
+<
+
+*codereview* will now download the Pull Request patch, *stash your
+current changes* and *checkout the PR's base SHA*. Then it'll open every
+changed file in a new tab.
+
+The first time, it'll ask you for a GitHub authorization token. You can
+generate those from your Applications settings in your GitHub account page.
