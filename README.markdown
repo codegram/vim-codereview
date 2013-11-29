@@ -2,6 +2,8 @@
 
 ## GitHub Pull Request-based Code Reviews
 
+WARNING: A bit rough on the edges. I'm polishing it as I use it more.
+
 With *codereview* you can review Pull Requests on GitHub right from Vim, as
 well as comment on specific lines of the pull request or in the general PR
 comments.
@@ -45,8 +47,13 @@ generate those from your Applications settings in your GitHub account page.
 
 ### Commenting on a specific line
 
-TBD.
+When reviewing code, you can go to any line and comment on any addition or
+deletion by issuing the `:CodeReviewComment` command (you can map it to
+whatever you'd like).
+
+A new split will appear where you can write your comment, and when you're done,
+just press `<leader>c` to post your comment.
 
 ### Commenting on the whole Pull Request
 
-TBD.
+Not yet implemented.
