@@ -5,8 +5,16 @@ if has('ruby')
   fun! codereview#Review(url)
     ruby CodeReview.review Vim.evaluate("a:url")
   endfun
+
+  fun! codereview#Comment()
+    ruby CodeReview.current.comment
+  endfun
 else
   fun! codereview#Review()
+    echo "Sorry, codereview.vim requires vim to be built with Ruby support."
+  endfun
+
+  fun! codereview#Comment()
     echo "Sorry, codereview.vim requires vim to be built with Ruby support."
   endfun
 endif
