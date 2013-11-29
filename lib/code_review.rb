@@ -1,9 +1,9 @@
 require 'tempfile'
 require 'json'
+require_relative 'patch'
+require_relative 'github'
 
 class CodeReview
-  TOKEN_PATH = File.expand_path("~/.codereview")
-
   def self.current
     @current
   end
@@ -14,69 +14,41 @@ class CodeReview
   end
 
   def initialize(url)
-    @url        = url
-    @token      = authentication_token
-    @patch_path = download_patch
-    @patch      = File.readlines(@patch_path)
-    @data       = pull_request_data
+    @github = Github.new(url)
   end
 
   def review
-    `git stash; git checkout #{data[:base]}`
+    `git stash; git checkout #{pull_request_data[:base]}`
     Vim.command("PatchReview #{patch_path}")
   end
 
   def comment
+    contents = File.read(patch_path)
+
     win0 = VIM::Window[0]
     win1 = VIM::Window[1]
-    win = win0.buffer.name ? win1 : win0
-
-    name = win.buffer.name
+    filename = (win0.buffer.name || win1.buffer.name).gsub(Vim.evaluate('getcwd()') + '/', '')
+    current_file = VIM::Buffer.current.name ? :original : :patched
     line_number = VIM::Buffer.current.line_number
 
-    line = VIM::Buffer.current[line_number]
-    puts "Searching for #{line}"
+    patch = Patch.new(contents)
+    location = if current_file == :original
+      patch.find_deletion(filename, line_number)
+    else
+      patch.find_addition(filename, line_number)
+    end
 
-    match = @patch.detect { |x| p x; x =~ /#{Regexp.escape(line)}/ }
-    p match
-
-    puts "NAME: #{name}, LINE: #{line}"
+    puts github.post_pull_request_comment("TESTIN!", location)
   end
 
   private
-  attr_reader :url, :token, :patch_path, :data, :patch
+  attr_reader :github
 
-  def authentication_token
-    if File.exist?(TOKEN_PATH)
-      File.read(TOKEN_PATH)
-    else
-      token = Vim.evaluate("input('Create a GitHub authorization token and paste hit here: ')")
-      File.open(TOKEN_PATH, "w") do |file|
-        file.write token
-      end
-      token
-    end
-  end
-
-  def download_patch
-    download_pull_request("application/vnd.github.v3.patch")
+  def patch_path
+    github.patch_path
   end
 
   def pull_request_data
-    path = download_pull_request("application/json")
-    data = JSON.parse(File.read(path))
-    {
-      :head => data["head"]["sha"],
-      :base => data["base"]["sha"],
-      :merged => data["merged"]
-    }
-  end
-
-  def download_pull_request(content_type)
-    user, repo, pull = url.scan(/github\.com\/(.*)\/(.*)\/pull\/(\d+)/).first
-    temp = Tempfile.new("review-#{user}-#{repo}-#{pull}.patch")
-    puts "Downloading Pull Request #{user}/#{repo}##{pull}..."
-    `curl --silent -H "Authorization: token #{token}" -H "Accept: #{content_type}" -L -o #{temp.path} https://api.github.com/repos/#{user}/#{repo}/pulls/#{pull}`
-    temp.path
+    github.pull_request_data
   end
 end

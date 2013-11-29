@@ -1,0 +1,39 @@
+From 973a92b0ccf2291085d4b76ad619617288b42a73 Mon Sep 17 00:00:00 2001
+From: "Ed Balls" <ed.balls@gmail.com>
+Date: Thu, 7 Nov 2013 14:41:12 +0100
+Subject: [PATCH] Fix the world
+
+---
+ app/controllers/foo_controller.rb |  4 +---
+ app/helpers/foo_helper.rb         |  2 ++
+ 2 files changed, 3 insertion(+), 3 deletions(-)
+
+diff --git a/app/controllers/foo_controller.rb b/app/controllers/foo_controller.rb
+index 663e1e6..8c0ca2b 100644
+--- a/app/controllers/foo_controller.rb
++++ b/app/controllers/foo_controller.rb
+@@ -1,6 +1,6 @@
+ # -*- encoding : utf-8 -*-
+ class FooController
+   def index
+     @foo = Foo.new
+-    render :bar
++    render :foo
+   end
+@@ -8,4 +8,2 @@
+   def update
+-    do_bar
+-    do_baz
+   end
+diff --git a/app/helpers/foo_helper.rb b/app/helpers/foo_helper.rb
+index c8eccd6..458c2f3 100644
+--- a/app/helpers/foo_helper.rb
++++ b/app/helpers/foo_helper.rb
+@@ -1,3 +1,5 @@
+ # -*- encoding : utf-8 -*-
+ module FooHelper
++  def render_foos
++  end
+ end
+--
+1.8.5-rc3
