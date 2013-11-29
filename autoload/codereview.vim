@@ -6,8 +6,8 @@ if has('ruby')
     ruby CodeReview.review Vim.evaluate("a:url")
   endfun
 
-  fun! codereview#Comment()
-    ruby CodeReview.current.comment
+  fun! codereview#NewComment()
+    ruby CodeReview.current.new_comment
   endfun
 else
   fun! codereview#Review()
