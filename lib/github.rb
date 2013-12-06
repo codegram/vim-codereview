@@ -11,17 +11,27 @@ class Github
     @url = pull_request_url
   end
 
-  def post_pull_request_comment(body, location)
+  def post_change_comment(contents, location)
     body = JSON.dump({
-      body: body,
+      body: contents,
       commit_id: location.commit_id,
       path: location.path,
       position: location.position
     })
 
-    curl %{--silent -X POST -H "Accept: application/json" -H "Content-type: application/json" -H "Authorization: token #{token}" #{base_api_url}/comments -d '#{body}'}
+    curl %Q{-X POST -H "Accept: application/json" -H "Content-type: application/json" #{base_api_url}/comments -d '#{body}'}
     :OK
   end
+
+  def post_comment(contents)
+    body = JSON.dump({
+      body: contents
+    })
+
+    curl %Q{-X POST -H "Accept: application/json" -H "Content-type: application/json" #{base_api_url(true)}/comments -d '#{body}'}
+    :OK
+  end
+
 
   def patch_path
     @patch_path ||= download_pull_request("application/vnd.github.v3.patch")
@@ -60,7 +70,7 @@ class Github
     user, repo, pull = url_info
     temp = Tempfile.new("review-#{user}-#{repo}-#{pull}.patch")
     puts "Downloading Pull Request #{user}/#{repo}##{pull}..."
-    curl %Q{--silent -H "Authorization: token #{token}" -H "Accept: #{content_type}" -L -o #{temp.path} #{base_api_url}}
+    curl %Q{-H "Accept: #{content_type}" -L -o #{temp.path} #{base_api_url}}
     temp.path
   end
 
@@ -68,13 +78,13 @@ class Github
     url.scan(/github\.com\/(.*)\/(.*)\/pull\/(\d+)/).first
   end
 
-  def base_api_url
+  def base_api_url(issue=false)
     user, repo, pull = url_info
-    "https://api.github.com/repos/#{user}/#{repo}/pulls/#{pull}"
+    "https://api.github.com/repos/#{user}/#{repo}/#{issue ? 'issues' : 'pulls'}/#{pull}"
   end
 
   def curl(args)
-    Timeout.timeout(TIMEOUT) { `curl #{args}` }
+    Timeout.timeout(TIMEOUT) { `curl --silent -H "Authorization: token #{token}" #{args}` }
   rescue Timeout::Error=>e
     raise TimeoutError, e.message
   end

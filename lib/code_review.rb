@@ -22,7 +22,7 @@ class CodeReview
     Vim.command("PatchReview #{patch_path}")
   end
 
-  def new_comment
+  def new_change_comment
     contents = File.read(patch_path)
 
     win0 = VIM::Window[0]
@@ -38,14 +38,14 @@ class CodeReview
       patch.find_addition(filename, line_number)
     end
 
-    Vim.command("vsplit New_Comment")
-    Vim.command("normal! ggdG")
-    Vim.command("setlocal buftype=nofile")
-    Vim.command "silent nnoremap <buffer> <leader>c :ruby CodeReview.current.create_comment<cr>"
+    Vim.command "vsplit New_Change_Comment"
+    Vim.command "normal! ggdG"
+    Vim.command "setlocal buftype=nofile"
+    Vim.command "silent nnoremap <buffer> <leader>c :ruby CodeReview.current.create_change_comment<cr>"
     Vim.command %Q{echo "Write your commit message in this window, then type <leader>c when you're done. And be constructive! :)"}
   end
 
-  def create_comment
+  def create_change_comment
     if !@location
       raise ArgumentError, "Can't create a comment from a non-comment buffer. Call :CodeReviewComment first."
     end
@@ -53,7 +53,24 @@ class CodeReview
     buf = VIM::Buffer.current
     contents = buf.count.times.map { |i| buf[i+1] }.join("\n")
     Vim.command %Q{echo "Posting comment to GitHub..."}
-    github.post_pull_request_comment(contents, @location)
+    github.post_change_comment(contents, @location)
+    Vim.command "bd"
+    Vim.command %Q{echo "Comment posted successfully."}
+  end
+
+  def new_comment
+    Vim.command "vsplit New_Comment"
+    Vim.command "normal! ggdG"
+    Vim.command "setlocal buftype=nofile"
+    Vim.command "silent nnoremap <buffer> <leader>c :ruby CodeReview.current.create_comment<cr>"
+    Vim.command %Q{echo "Write your commit message in this window, then type <leader>c when you're done. And be constructive! :)"}
+  end
+
+  def create_comment
+    Vim.command %Q{echo "Posting comment to GitHub..."}
+    buf = VIM::Buffer.current
+    contents = buf.count.times.map { |i| buf[i+1] }.join("\n")
+    github.post_comment(contents)
     Vim.command "bd"
     Vim.command %Q{echo "Comment posted successfully."}
   end

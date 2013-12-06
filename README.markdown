@@ -48,12 +48,18 @@ generate those from your Applications settings in your GitHub account page.
 ### Commenting on a specific line
 
 When reviewing code, you can go to any line and comment on any addition or
-deletion by issuing the `:CodeReviewComment` command (you can map it to
-whatever you'd like).
+deletion by issuing the `:CodeReviewCommentChange` command (you can map it to
+whatever you'd like). You can only comment on additions or deletions, not
+context lines.
 
 A new split will appear where you can write your comment, and when you're done,
 just press `<leader>c` to post your comment.
 
 ### Commenting on the whole Pull Request
 
-Not yet implemented.
+When you're done nitpicking on your colleague's diff, you can comment on the
+whole Pull Request to give them a +1 or a :ship: :it: or whatever by issuing
+`:CodeReviewComment` command (you can map it to whatever you'd like).
+
+A new split will appear where you can write your comment, and when you're done,
+just press `<leader>c` to post your comment.
