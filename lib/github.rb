@@ -1,6 +1,10 @@
 require 'json'
+require 'timeout'
 
 class Github
+  TimeoutError = Class.new(Timeout::Error)
+  TIMEOUT = 3
+
   TOKEN_PATH = File.expand_path("~/.codereview")
 
   def initialize(pull_request_url)
@@ -15,7 +19,7 @@ class Github
       position: location.position
     })
 
-    `curl --silent -X POST -H "Accept: application/json" -H "Content-type: application/json" -H "Authorization: token #{token}" #{base_api_url}/comments -d '#{body}'`
+    curl %{--silent -X POST -H "Accept: application/json" -H "Content-type: application/json" -H "Authorization: token #{token}" #{base_api_url}/comments -d '#{body}'}
     :OK
   end
 
@@ -56,7 +60,7 @@ class Github
     user, repo, pull = url_info
     temp = Tempfile.new("review-#{user}-#{repo}-#{pull}.patch")
     puts "Downloading Pull Request #{user}/#{repo}##{pull}..."
-    `curl --silent -H "Authorization: token #{token}" -H "Accept: #{content_type}" -L -o #{temp.path} #{base_api_url}`
+    curl %Q{--silent -H "Authorization: token #{token}" -H "Accept: #{content_type}" -L -o #{temp.path} #{base_api_url}}
     temp.path
   end
 
@@ -67,5 +71,11 @@ class Github
   def base_api_url
     user, repo, pull = url_info
     "https://api.github.com/repos/#{user}/#{repo}/pulls/#{pull}"
+  end
+
+  def curl(args)
+    Timeout.timeout(TIMEOUT) { `curl #{args}` }
+  rescue Timeout::Error=>e
+    raise TimeoutError, e.message
   end
 end

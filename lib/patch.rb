@@ -1,19 +1,29 @@
+require 'timeout'
+
 class Patch
+  ProcessingTimeout = Class.new(Timeout::Error)
   Location = Struct.new(:commit_id, :path, :position)
+  TIMEOUT = 1
 
   def initialize(patch)
     @patch = ("\n" + patch).split("\n")
   end
 
   def find_addition(filename, subjective_line)
-    find_change(filename, subjective_line, :addition)
+    with_timeout { find_change(filename, subjective_line, :addition) }
   end
 
   def find_deletion(filename, subjective_line)
-    find_change(filename, subjective_line, :deletion)
+    with_timeout { find_change(filename, subjective_line, :deletion) }
   end
 
   private
+
+  def with_timeout(&block)
+    Timeout.timeout(TIMEOUT, &block)
+  rescue Timeout::Error
+    raise ProcessingTimeout, "Couldn't find that line in the diff patch. Remember that you can only comment on additions or deletions."
+  end
 
   #TODO: kill me plz
   def find_change(filename, subjective_line, type)
@@ -27,8 +37,10 @@ class Patch
 
     header = @patch[line]
 
-    starts = header.scan(/@@ -(\d)/).first.first.to_i
+    starts = header.scan(/@@ -(\d+)/).first.first.to_i
+
     offset = (subjective_line - starts + 1)
+
     (subjective_line - starts + 1).times do |i|
       line +=1
       if @patch[line] =~ /^#{skip}/

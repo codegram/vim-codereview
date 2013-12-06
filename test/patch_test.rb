@@ -23,4 +23,22 @@ describe Patch do
   it 'finds the line of an addition in another file' do
     patch.find_addition("app/helpers/foo_helper.rb", 3).must_equal loc('app/helpers/foo_helper.rb', 3)
   end
+
+  it 'times out if trying to comment on context lines' do
+    proc {
+      patch.find_addition("app/helpers/foo_helper", 2)
+    }.must_raise Patch::ProcessingTimeout
+  end
+
+  it 'times out if the patch is bogus' do
+    bogus_patch = Class.new(Patch) {
+      def find_change(*args)
+        sleep 8
+      end
+    }.new("foo\nbar\nbaz")
+
+    proc {
+      bogus_patch.find_addition("app/controllers/foo_controller.rb", 5)
+    }.must_raise Patch::ProcessingTimeout
+  end
 end
