@@ -76,3 +76,9 @@ whole Pull Request to give them a +1 or a :ship: :it: or whatever by issuing
 
 A new split will appear where you can write your comment, and when you're done,
 just press `<leader>c` to post your comment.
+
+### Reloading the comments
+
+If you want to fetch the newest comments for the PR you're reviewing, just
+issue `:CodeReviewReloadComments`! You'll be taken to the Overview tab with a,
+new, fresh list of comments.
