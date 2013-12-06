@@ -2,6 +2,7 @@ require 'tempfile'
 require 'json'
 require_relative 'patch'
 require_relative 'github'
+require_relative 'vim_ext'
 
 class CodeReview
   def self.current
@@ -19,7 +20,10 @@ class CodeReview
 
   def review
     `git stash; git checkout #{pull_request_data[:base]}`
-    Vim.command("PatchReview #{patch_path}")
+    Vim.command "PatchReview #{patch_path}"
+    Vim.command "file Overview"
+    Vim.command "setlocal buftype=nofile"
+    reload_comments
   end
 
   def new_change_comment
@@ -73,10 +77,31 @@ class CodeReview
     github.post_comment(contents)
     Vim.command "bd"
     Vim.command %Q{echo "Comment posted successfully."}
+    reload_comments
+  end
+
+  def reload_comments
+    Vim.command "tabfirst"
+    Vim.command "tabnext" until VIM::Buffer.current == overview_buffer
+    Vim.command "%d"
+    (["PULL REQUEST COMMENTS", "Type :CodeReviewComment to add yours", ""] + render_comments.split("\n")).each_with_index do |line, idx|
+      overview_buffer.append(idx, line)
+    end
   end
 
   private
   attr_reader :github
+
+  def overview_buffer
+    @overview_buffer ||= begin
+      idx = VIM::Buffer.count.times.detect { |i| VIM::Buffer[i].name =~ /Overview$/ }
+      idx ? VIM::Buffer[idx] : raise(RuntimeError, "Can't find Overview buffer -- did you close it?")
+    end
+  end
+
+  def render_comments
+    github.get_comments.map(&:to_s).join("\n\n")
+  end
 
   def patch_path
     github.patch_path

@@ -45,12 +45,25 @@ changed file in a new tab.
 The first time, it'll ask you for a GitHub authorization token. You can
 generate those from your Applications settings in your GitHub account page.
 
+You'll be now on the Overview tab. Keep reading.
+
+### The Overview tab
+
+Here you'll see a list of comments on the Pull Request itself (**not on the
+diff**). If you want to add a comment to this list, see "Commenting on the
+whole Pull Request" below.
+
+But for now you probably want to review some code. Switch through the different
+tabs to see all the changes. Once you see a specific change on the diff that
+you want to give your feedback on, you'll want to leave a constructive comment,
+right? Keep reading to learn how to do it.
+
 ### Commenting on a specific line
 
-When reviewing code, you can go to any line and comment on any addition or
-deletion by issuing the `:CodeReviewCommentChange` command (you can map it to
-whatever you'd like). You can only comment on additions or deletions, not
-context lines.
+When reviewing code in the diff tabs, you can go to any line and comment on any
+addition or deletion by issuing the `:CodeReviewCommentChange` command (you can
+map it to whatever you'd like). You can only comment on additions or deletions,
+not context lines.
 
 A new split will appear where you can write your comment, and when you're done,
 just press `<leader>c` to post your comment.

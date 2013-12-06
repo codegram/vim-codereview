@@ -13,6 +13,10 @@ if has('ruby')
   fun! codereview#NewComment()
     ruby CodeReview.current.new_comment
   endfun
+
+  fun! codereview#ReloadComments()
+    ruby CodeReview.current.reload_comments
+  endfun
 else
   fun! codereview#Review()
     echo "Sorry, codereview.vim requires vim to be built with Ruby support."

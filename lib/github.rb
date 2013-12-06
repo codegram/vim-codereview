@@ -7,8 +7,28 @@ class Github
 
   TOKEN_PATH = File.expand_path("~/.codereview")
 
+  class Comment
+    attr_reader :author, :body, :created_at
+    def initialize(hash)
+      @author = hash["user"]["login"]
+      @body = hash["body"]
+      @created_at = hash["created_at"]
+    end
+
+    def to_s
+      "@#{author}\n#{'-' * (author.length+1)}\n#{body}"
+    end
+  end
+
   def initialize(pull_request_url)
     @url = pull_request_url
+  end
+
+  def get_comments
+    user, repo, pull = url_info
+    @comments_path ||= Tempfile.new("review-#{user}-#{repo}-#{pull}-comments.json").path
+    curl %Q{-H "Accept: application/json" #{base_api_url(true)}/comments -o #{@comments_path}}
+    JSON.load(File.read(@comments_path)).map(&Comment.method(:new))
   end
 
   def post_change_comment(contents, location)

@@ -5,3 +5,4 @@ end
 command! -nargs=1 CodeReview call codereview#Review(<f-args>)
 command! CodeReviewComment call codereview#NewComment()
 command! CodeReviewCommentChange call codereview#NewChangeComment()
+command! CodeReviewReloadComments call codereview#ReloadComments()
