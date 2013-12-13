@@ -31,15 +31,17 @@ class CodeReview
 
     win0 = VIM::Window[0]
     win1 = VIM::Window[1]
-    filename = (win0.buffer.name || win1.buffer.name).gsub(Vim.evaluate('getcwd()') + '/', '')
+    win2 = VIM::Window[2]
+    filename = (win0.buffer.name || win1.buffer.name || win2.buffer.name).gsub(Vim.evaluate('getcwd()') + '/', '')
     current_file = VIM::Buffer.current.name ? :original : :patched
     line_number = VIM::Buffer.current.line_number
+    text = VIM::Buffer.current[line_number].chomp
 
     patch = Patch.new(contents)
     @location = if current_file == :original
-      patch.find_deletion(filename, line_number)
+      patch.find_deletion(filename, line_number, text)
     else
-      patch.find_addition(filename, line_number)
+      patch.find_addition(filename, line_number, text)
     end
 
     Vim.command "vsplit New_Change_Comment"

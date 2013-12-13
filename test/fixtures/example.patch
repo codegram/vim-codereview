@@ -1,7 +1,7 @@
 From 973a92b0ccf2291085d4b76ad619617288b42a73 Mon Sep 17 00:00:00 2001
 From: "Ed Balls" <ed.balls@gmail.com>
 Date: Thu, 7 Nov 2013 14:41:12 +0100
-Subject: [PATCH] Fix the world
+Subject: [PATCH 1/2] Fix the world
 
 ---
  app/controllers/foo_controller.rb |  4 +---
@@ -35,5 +35,29 @@ index c8eccd6..458c2f3 100644
 +  def render_foos
 +  end
  end
+--
+1.8.5-rc3
+From 124a92b0ccf2291085d4b76ad619617288b42a73 Mon Sep 17 00:00:00 2001
+From: "Ed Balls" <ed.balls@gmail.com>
+Date: Thu, 7 Nov 2013 14:52:23 +0100
+Subject: [PATCH 2/2] Fix the world again
+
+---
+ app/controllers/foo_controller.rb   |  2 +-
+ app/controllers/bogus_controller.rb |  2 --
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/app/controllers/foo_controller.rb b/app/controllers/foo_controller.rb
+index 663e1e6..8c0ca2b 100644
+--- a/app/controllers/foo_controller.rb
++++ b/app/controllers/foo_controller.rb
+@@ -1,6 +1,6 @@
+ # -*- encoding : utf-8 -*-
+ class FooController
+   def index
+-    @foo = Foo.new
++    @foo = Foo.new(arguments)
+     render :foo
+   end
 --
 1.8.5-rc3
