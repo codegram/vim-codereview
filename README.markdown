@@ -27,6 +27,12 @@ Bundle 'codegram/vim-codereview'
 
 If you use Pathogen, clone this repo in your `~/.vim/bundle` directory.
 
+## Screencast
+
+For a quick live demo, check out this screencast:
+
+[![screencast](http://img.youtube.com/vi/1KaTY9AA48w/0.jpg)](http://youtu.be/1KaTY9AA48w)
+
 ## Usage
 
 Make sure you're in the correct folder for the Git repository you want to
