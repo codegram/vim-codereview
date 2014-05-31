@@ -3,7 +3,7 @@ require 'timeout'
 
 class Github
   TimeoutError = Class.new(Timeout::Error)
-  TIMEOUT = 3
+  TIMEOUT = 10
 
   TOKEN_PATH = File.expand_path("~/.codereview")
 
