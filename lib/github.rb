@@ -77,7 +77,7 @@ class Github
       if File.exist?(TOKEN_PATH)
         File.read(TOKEN_PATH)
       else
-        token = Vim.evaluate("input('Create a GitHub authorization token and paste hit here: ')")
+        token = Vim.evaluate("input('Create a GitHub authorization token and paste it here: ')")
         File.open(TOKEN_PATH, "w") do |file|
           file.write token
         end
