@@ -49,7 +49,13 @@ current changes* and *checkout the PR's base SHA*. Then it'll open every
 changed file in a new tab.
 
 The first time, it'll ask you for a GitHub authorization token. You can
-generate those from your Applications settings in your GitHub account page.
+generate those from your Applications settings in your GitHub account page. 
+More information available on [Github help](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
+
+If you need to change the token later on, you can find it under `~/.codereview`,
+or you can remove the file and be prompted for a token again. Please note 
+this file is stored in plaintext. Contributions to store the key in the local
+keychain or encrypt it with GPG are very welcome.
 
 You'll be now on the Overview tab. Keep reading.
 
