@@ -25,12 +25,12 @@ License: MIT license {{{
 
 INTRODUCTION                                    *codereview*
 
-With *codereview* you can review Pull Requests on GitHub right from Vim, as
+With codereview you can review Pull Requests on GitHub right from Vim, as
 well as comment on specific lines of the pull request or in the general PR
 comments.
 
-Since it builds upon the great *patchreview* and adds some GitHub-related
-convenience, it needs the *patchreview* Vim plug-in to be installed.
+Since it builds upon the great |patchreview| and adds some GitHub-related
+convenience, it needs the patchreview Vim plug-in to be installed.
 
 INSTALL                                         *codereview-install*
 
@@ -56,9 +56,11 @@ To start a code review for a specific pull request:
   :CodeReview https://github.com/myorganization/myrepo/pulls/1328
 <
 
-*codereview* will now download the Pull Request patch, *stash your
-current changes* and *checkout the PR's base SHA*. Then it'll open every
+codereview will now download the Pull Request patch, stash your
+current changes, and checkout the PR's base SHA. Then it'll open every
 changed file in a new tab.
 
 The first time, it'll ask you for a GitHub authorization token. You can
 generate those from your Applications settings in your GitHub account page.
+
+vim:tw=78:ts=8:ft=help:norl:
