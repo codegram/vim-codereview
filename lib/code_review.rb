@@ -19,7 +19,7 @@ class CodeReview
   end
 
   def review
-    `git stash; git checkout #{pull_request_data[:base]}`
+    `git stash --include-untracked; git checkout #{pull_request_data[:base]}`
     Vim.command "PatchReview #{patch_path}"
     Vim.command "file Overview"
     Vim.command "setlocal buftype=nofile"
