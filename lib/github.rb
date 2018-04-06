@@ -95,12 +95,18 @@ class Github
   end
 
   def url_info
-    url.scan(/github\.com\/(.*)\/(.*)\/pull\/(\d+)/).first
+    url.scan(/#{Vim.evaluate('g:CODEREVIEW_GITHUB_DOMAIN')}\/(.*)\/(.*)\/pull\/(\d+)/).first
   end
 
   def base_api_url(issue=false)
     user, repo, pull = url_info
-    "https://api.github.com/repos/#{user}/#{repo}/#{issue ? 'issues' : 'pulls'}/#{pull}"
+    api_endpoint = if Vim.evaluate('g:CODEREVIEW_GITHUB_DOMAIN') == 'github.com'
+                     'api.github.com'
+                   else
+                     Vim.evaluate('g:CODEREVIEW_GITHUB_DOMAIN') + '/api/v3'
+                   end
+
+    "https://#{api_endpoint}/repos/#{user}/#{repo}/#{issue ? 'issues' : 'pulls'}/#{pull}"
   end
 
   def curl(args)
