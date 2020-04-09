@@ -1,3 +1,6 @@
+if !exists('g:CODEREVIEW_GITHUB_DOMAIN')
+  let g:CODEREVIEW_GITHUB_DOMAIN = 'github.com'
+end
 if !exists('g:CODEREVIEW_INSTALL_PATH')
   let g:CODEREVIEW_INSTALL_PATH = fnamemodify(expand("<sfile>"), ":p:h")
 end

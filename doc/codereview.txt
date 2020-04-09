@@ -63,4 +63,9 @@ changed file in a new tab.
 The first time, it'll ask you for a GitHub authorization token. You can
 generate those from your Applications settings in your GitHub account page.
 
+					      *g:CODEREVIEW_GITHUB_DOMAIN*
+g:CODEREVIEW_GITHUB_DOMAIN
+	If using codereview against a GitHub Enterprise environment, set this
+	to the domain that the instance is served on.
+
 vim:tw=78:ts=8:ft=help:norl:
