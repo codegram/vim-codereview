@@ -18,11 +18,11 @@ with is 1.9+ compatible.
 
 Also, you'll need `curl` installed.
 
-If you use Vundle put this in your vimrc:
+If you use [Vundle](https://github.com/gmarik/Vundle.vim) put this in your `vimrc`:
 
 ```
-Bundle 'junkblocker/patchreview-vim'
-Bundle 'codegram/vim-codereview'
+Plugin 'junkblocker/patchreview-vim'
+Plugin 'codegram/vim-codereview'
 ```
 
 If you use Pathogen, clone this repo in your `~/.vim/bundle` directory.
